@@ -300,41 +300,37 @@ WebSocket: wss://api.pro-hashkey.com
 
 **Request Content：**
 
-| **PARAMETER**   | **TYPE** | **REQUIRED** | **DESCRIPTION**                                                                                              |
-| --------------- | -------- |--------------|--------------------------------------------------------------------------------------------------------------|
-| type            | string   | true         | "limit": limit order; "market": market order; "stopLimit": stop limit order; "stopMarket": stop market order |
-| client_order_id | string   | true         | Max length: 20. Must be unique                                                                               |
-| instrument_id   | string   | true         | e.g. "ETH-BTC"                                                                                               |
-| direction       | string   | true         | "buy" or "sell"                                                                                              |
-| stop_price      | string   | false        | Required when order type is stopLimit or stopMarket                                                          |
-| price           | string   | false        | Limit Price. Required when order type is limit or stopLimit                                                  |
-| volume          | string   | true         | Total Volume                                                                                                 |
-| post_only       | bool     | false        | Only maker  default false                                                                                    |
-| time_in_force (currently unused) | string | false        | default: limit and stopLimit: GTC, market and stopMarket: IOC                                                |
+| **PARAMETER**   | **TYPE** | **REQUIRED** | **DESCRIPTION**                                                                                            |
+| --------------- | -------- |--------------|------------------------------------------------------------------------------------------------------------|
+| type            | string   | true         | "limit": limit order; "market": market order; |
+| client_order_id | string   | true         | Max length: 20. Must be unique                                                                             |
+| instrument_id   | string   | true         | e.g. "ETH-BTC"                                                                                             |
+| direction       | string   | true         | "buy" or "sell"                                                                                            |
+| price           | string   | false        | Limit Price. Required when order type is limit                                               |
+| volume          | string   | true         | Total Volume                                                                                               |
+| post_only       | bool     | false        | Only maker  default false                                                                                  |
+| time_in_force (currently unused) | string | false        | default: limit : GTC, market : IOC                                              |
 
  **Response Content：**
 
-| **PARAMETER**   | **TYPE** | **DESCRIPTION**                                                                                              |
-| --------------- | -------- |--------------------------------------------------------------------------------------------------------------|
-| type            | string   | "limit": limit order; "market": market order; "stopLimit": stop limit order; "stopMarket": stop market order |
-| sys_order_id    | string   | Server order id.                                                                                             |
-| client_order_id | string   | Client order id.                                                                                             |
-| instrument_id   | string   | e.g. "ETH-BTC"                                                                                               |
-| direction       | string   | "buy" or "sell"                                                                                              |
-| stop_price      | string   | Required when order type is stopLimit or stopMarket                                                          |
-| price           | string   | Limit Price. Required when order type is limit or stopLimit                                                  |
-| volume          | string   | Total Volume                                                                                                 |
-| post_only       | bool     | Only maker                                                                                                   |
-| timestamp       | int64    | millisecond time-stamp                                                                                       |
-| time_in_force (currently unused) | string   | default: limit and stopLimit: GTC, market and stopMarket: IOC                               |
+| **PARAMETER**   | **TYPE** | **DESCRIPTION**                                                                                             |
+| --------------- | -------- |-------------------------------------------------------------------------------------------------------------|
+| type            | string   | "limit": limit order; "market": market order;  |
+| client_order_id | string   | Client order id.                                                                                            |
+| sys_order_id    | string   | Server order id.                                                                                            |
+| instrument_id   | string   | e.g. "ETH-BTC"                                                                                              |
+| direction       | string   | "buy" or "sell"                                                                                             |
+| price           | string   | Limit Price. Required when order type is limit                                              |
+| volume          | string   | Total Volume                                                                                                |
+| post_only       | bool     | Only maker                                                                                                  |
+| timestamp       | int64    | millisecond time-stamp                                                                                      |
+| time_in_force (currently unused) | string   | default: limit : GTC, market : IOC                               |
 
 **Request Example：**
 
 ```json
 {
-    "type": "limit",                    // 订单类型:
-                                        //    limit: 限价单;  market: 市价单;
-                                        //    stopLimit: 限价止盈止损单;  stopMarket: 市价止盈止损单;
+    "type": "limit",                    // 订单类型: limit: 限价单;  market: 市价单;
     "client_order_id":"000000001",      // 客户订单号
     "instrument_id":"ETH-BTC",          // 合约ID
     "direction":"buy",                  // 买卖方向, buy:买, sell:卖
@@ -352,11 +348,10 @@ WebSocket: wss://api.pro-hashkey.com
     "error_message":"",     // 错误描述
     "data":{
         "type":"limit",                // 订单类型
-        "sys_order_id":"1550849345000001",     // 系统订单号
         "client_order_id":"000000001",  // 客户订单号
+        "sys_order_id":"1550849345000001",     // 系统订单号
         "instrument_id":"ETH-BTC",      // 合约编号
         "direction":"buy",              // 买卖方向
-        "stop_price": "0",              // 触发价格
         "price":"1",                    // 限价
         "volume":"1",                   // 数量
         "post_only": true,              // 是否只做maker
@@ -447,23 +442,22 @@ null
 
 **Response Content：**
 
-| **PARAMETER**    | **TYPE** | **DESCRIPTION**                                                                                              |
-|------------------|----------|--------------------------------------------------------------------------------------------------------------|
-| type             | string   | "limit": limit order; "market": market order; "stopLimit": stop limit order; "stopMarket": stop market order |
-| sys_order_id     | string   | Server Order ID                                                                                              |
-| client_order_id  | string   | Client order id.                                                                                             |
-| instrument_id    | string   | e.g. "ETH-BTC"                                                                                               |
-| direction        | string   | "buy" or "sell"                                                                                              |
-| stop_price       | string   | Required when order type is stopLimit or stopMarket                                                          |
-| price            | string   | Limit Price. Required when order type is limit or stopLimit                                                  |
-| volume           | string   | Original Total Volume                                                                                        |
-| status           | string   | Order status                                                                                                 |
-| post_only        | bool     | Only maker                                                                                                   |
-| timestamp        | int64    | millisecond time-stamp                                                                                       |
-| filled_size      | string   | The size that has been filled                                                                                |
-| unfilled_size    | string   | The size that has not been filled                                                                            |
-| avg_filled_price | string   | Average filled price                                                                                         |
-| sum_trade_amount | string   | cumulative trading amount(turnover)                                                                          |
+| **PARAMETER**    | **TYPE** | **DESCRIPTION**                                     |
+|:-----------------|----------|-----------------------------------------------------|
+| type             | string   | "limit": limit order; "market": market order;       |
+| client_order_id  | string   | Client order id.                                    |
+| sys_order_id     | string   | Server Order ID                                     |
+| instrument_id    | string   | e.g. "ETH-BTC"                                      |
+| direction        | string   | "buy" or "sell"                                     |
+| price            | string   | Limit Price. Required when order type is limit      |
+| volume           | string   | Original Total Volume                               |
+| status           | string   | Order status                                        |
+| post_only        | bool     | Only maker                                          |
+| timestamp        | int64    | millisecond time-stamp                              |
+| filled_size      | string   | The size that has been filled                       |
+| unfilled_size    | string   | The size that has not been filled                   |
+| avg_filled_price | string   | Average filled price                                |
+| sum_trade_amount | string   | cumulative trading amount(turnover)                 |
 
 **Order status**
 
@@ -490,20 +484,19 @@ null
     "error_code":"0000",    // 错误码
     "error_message":"",     // 错误描述
     "data":[{
-        "type": "limit",                // 交易类型
         "sys_order_id":"1550849345000001",     // 系统订单号
-        "client_order_id":"000000001",  // 客户订单号
         "instrument_id":"ETH-BTC",      // 合约编号
         "direction":"buy",              // 买卖方向
-        "stop_price":"0",               // 止损触发价格
+        "type": "limit",                // 交易类型
         "price":"1",                    // 限价
         "volume":"1",                   // 原始数量
         "status": "FILLED",             // 订单状态
-        "post_only": "false",           // 是否仅作为maker
         "timestamp": 1478692862000,     // 交易时间
-        "filled_size": "1",             // 已成交數量
         "avg_filled_price": "1",        // 成交均价
+        "client_order_id":"000000001",  // 客户订单号
+        "filled_size": "1",             // 已成交數量
         "unfilled_size": "0",           // 未成交数量
+        "post_only": "false",           // 是否仅作为maker
         "sum_trade_amount": "1"         // 累加成交额
     }]
 }
@@ -515,16 +508,16 @@ null
 
 **Query Parameters** **:**
 
-| **PARAMETER**   | **TYPE** | **REQUIRED** | **DESCRIPTION**                       |
-|-----------------| -------- |--------------| ------------------------------------- |
-| instrument_id   | string   | false        | e.g. "ETH-BTC"                        |
-| sys_order_id    | string   | false        | Server Order ID                       |
-| direction       | string   | false        | "buy" or "sell"                       |
-| sorting         | string   | false        | "desc" or "asc" default "asc"         |
-| limit           | string   | true         | Limit on number of results to return.min 1 max 200.|
-| page            | string   | true         | Used for pagination. Page number.     |
-| start_timestamp | string   | true         | millisecond time-stamp                |
-| end_timestamp   | string   | true         | millisecond time-stamp                |
+| **PARAMETER**   | **TYPE** | **REQUIRED** | **DESCRIPTION**                                     |
+|-----------------|----------|--------------|-----------------------------------------------------|
+| instrument_id   | string   | false        | e.g. "ETH-BTC"                                      |
+| sys_order_id    | string   | false        | Server Order ID                                     |
+| direction       | string   | false        | "buy" or "sell"                                     |
+| sorting         | string   | false        | "desc" or "asc" default "asc"                       |
+| limit           | string   | true         | Limit on number of results to return.min 1 max 200. |
+| page            | string   | true         | Used for pagination. Page number.                   |
+| start_timestamp | string   | true         | millisecond time-stamp                              |
+| end_timestamp   | string   | true         | millisecond time-stamp                              |
 
  **Response Content: **
 
@@ -540,7 +533,7 @@ null
 | fee                 | string   | Fee                    |
 | fee_ccy             | string   | Fee Currency           |
 | timestamp           | int64    | millisecond time-stamp |
-| trade_type          | string   | "Common", "Invalid"    |
+| trade_type          | string   | "Taker", "Maker"       |
 | base_asset_id       | string   | "ETH"                  |
 | base_asset_balance  | string   | Base Asset Balance     |
 | quote_asset_id      | string   | "USDT"                 |
@@ -566,16 +559,16 @@ null
     "error_code":"0000",    // 错误码
     "error_message":"",     // 错误描述
     "data":[{
-        "sys_order_id":"1550849345000001",     // 系统订单号
-        "trade_id":"1",                 // 成交编号
+        "trade_id":"1576437921000110",                 // 成交编号
+        "sys_order_id":"1576442678000018",     // 系统订单号
         "instrument_id":"ETH-BTC",      // 合约编号
         "direction":"buy",              // 买卖方向
         "price":"1",                    // 价格
         "volume":"1",                   // 数量
         "fee":"0.05",                   // 手续费
-        "fee_ccy": "BTC",               // 手续费币种
         "timestamp": 1478692862000,     // 交易时间
-        "trade_type": "Common"          // 交易类型
+        "fee_ccy": "BTC",               // 手续费币种
+        "trade_type": "Taker"          // 交易类型
     }]
 }
 ```
@@ -605,7 +598,7 @@ null
     "data":[{
         "asset":"ETH",
         "free": "1",
-        "freeze": "0",
+        "freeze": "0"
     }, {
         // other asset
     }]
@@ -871,10 +864,10 @@ null
 **Response Content：**
 
 | **PARAMETER**    | **TYPE** | **DESCRIPTION**        |
-| ---------------- |----------|------------------------|
+|------------------|----------|------------------------|
 | order_id         | string   | Order ID               |
-| fait_id          | string   | Asset ID               |
-| fait_type        | string   | "USD"                  |
+| fiat_id          | string   | Asset ID               |
+| fiat_type        | string   | "USD"                  |
 | indicated_amount | string   | Order Amount           |
 | amount           | string   | Real Amount            |
 | fee              | string   | Fee                    |
@@ -897,8 +890,8 @@ null
     "error_message": "",
     "data":[{
       "order_id": "00000001",
-      "fait_id": "USD",
-      "fait_type": "USD",
+      "fiat_id": "USD",
+      "fiat_type": "USD",
       "indicated_amount": "100",
       "amount": "100",
       "fee": "10",
@@ -1044,8 +1037,8 @@ null
     "error_message":"",     // 错误描述
     "data":[
         {
-            "instrument_id": "ETH-BTC",     // 合约编号
             "trade_id": "123456789",        // 成交编号
+            "instrument_id": "ETH-BTC",     // 合约编号
             "price": "10",                  // 价格
             "volume": "100",                // 数量
             "timestamp": 1478692862000,     // 时间
@@ -1308,11 +1301,11 @@ null
 
 | **PARAMETER**   | **TYPE** | **DESCRIPTION**                               |
 |-----------------| -------- | --------------------------------------------- |
-| instrument_id   | string   | e.g. "ETH-USDT", "ETH-BTC"                    |
+| close           | string   | Close  price                                  |
 | high            | string   | High  price                                   |
 | open            | string   | Open price                                    |
 | low             | string   | Low  price                                    |
-| close           | string   | Close  price                                  |
+| instrument_id   | string   | e.g. "ETH-USDT", "ETH-BTC"                    |
 | volume          | string   | Volume in base asset, e.g, ETH in ETH-BTC     |
 | start_timestamp | int64    | millisecond time-stamp     e.g. 1646213700000 |
 | end_timestamp   | int64    | millisecond time-stamp     e.g. 1646213800000 |
@@ -1335,15 +1328,14 @@ null
 
 ```json
 {
-    "type":"sub-resp",                           // 交易类型
     "topic":"kline",                             // 主题
     "data":[
       {
-        "instrument_id":"ETH-BTC",           // 合约编号
-        "open":"10",                         // 开始价格
         "close":"10",                        // 结束价格
         "high":"10",                         // 最高价格
         "low":"10",                          // 最低价格
+        "open":"10",                         // 开始价格
+        "instrument_id":"ETH-BTC",           // 合约编号
         "volume":"100",                      // 数量
         "start_timestamp":1646213700000,     // 开始时间
         "end_timestamp":1646213760000        // 结束时间
@@ -1404,7 +1396,6 @@ null
 
 ```json
 {
-    "type":"sub-resp",                  // 交易类型: sub-resp: 订阅结果
     "topic":"market_data",              // 主题
     "data":[
         {
@@ -1448,8 +1439,8 @@ null
 | **PARAMETER**   | **TYPE** | **DESCRIPTION** |
 |-----------------|----------|-----------------|
 | instrument_id   | string   | Instrument Id   |
-| sequence_no     | int64    | Sequence No     |
 | timestamp       | int64    | Timestamp       |
+| sequence_no     | int64    | Sequence No     |
 
 **Ask and Bid Content:**
 
@@ -1475,7 +1466,6 @@ null
 
 ```json
 {
-    "type":"sub-resp",                      // 交易类型: sub-resp: 订阅结果
     "topic":"depth_market_data",            // 主题
     "data":[
       {
@@ -1546,7 +1536,6 @@ null
 
 ```json
 {
-    "type":"sub-resp",
     "topic":"trade_rtn_all",                    // 主题
     "data":[
             {
@@ -1611,7 +1600,6 @@ null
 
 ```json
 {
-    "type":"sub-resp",
     "topic":"instruments_status_change",        // 主题
     "data":[
             {
@@ -1643,23 +1631,22 @@ null
 
 **Data Content:**
 
-| **PARAMETER**   | **TYPE** | **DESCRIPTION**                                                                                              |
-| --------------- |----------|--------------------------------------------------------------------------------------------------------------|
-| type            | string   | "limit": limit order; "market": market order; "stopLimit": stop limit order; "stopMarket": stop market order |
-| sys_order_id    | string   | Server Order ID                                                                                              |
-| client_order_id | string   | Client order id.                                                                                             |
-| instrument_id   | string   | e.g. "ETH-BTC"                                                                                               |
-| direction       | string   | "buy" or "sell"                                                                                              |
-| stop_price      | string   | Required when order type is stopLimit or stopMarket                                                          |
-| price           | string   | Limit Price. Required when order type is limit or stopLimit                                                  |
-| volume          | string   | Original Total Volume                                                                                        |
-| status          | string   | Order status                                                                                                 |
-| post_only       | bool     | Only maker                                                                                                   |
-| timestamp       | int64    | millisecond time-stamp                                                                                       |
-| filled_size     | string   | The size that has been filled                                                                                |
-| unfilled_size    | string   | The size that has not been filled                                                                            |
-| avg_filled_price | string   | Average filled price                                                                                         |
-| sum_trade_amount | string   | cumulative trading amount(turnover)                                                                          |
+| **PARAMETER**    | **TYPE** | **DESCRIPTION**                                     |
+|------------------|----------|-----------------------------------------------------|
+| sys_order_id     | string   | Server Order ID                                     |
+| client_order_id  | string   | Client order id.                                    |
+| type             | string   | "limit": limit order; "market": market order;       |
+| instrument_id    | string   | e.g. "ETH-BTC"                                      |
+| direction        | string   | "buy" or "sell"                                     |
+| price            | string   | Limit Price. Required when order type is limit      |
+| volume           | string   | Original Total Volume                               |
+| filled_size      | string   | The size that has been filled                       |
+| status           | string   | Order status                                        |
+| timestamp        | int64    | millisecond time-stamp                              |
+| post_only        | bool     | Only maker                                          |
+| avg_filled_price | string   | Average filled price                                |
+| unfilled_size    | string   | The size that has not been filled                   |
+| sum_trade_amount | string   | cumulative trading amount(turnover)                 |
 
 **How to Subscribe：**
 
@@ -1679,21 +1666,19 @@ null
 
 ```json
 {
-    "type":"sub-resp",
     "topic":"order_rtn",
     "data":[{
-        "type": "limit",                // 交易类型
         "sys_order_id":"1550849345000001",     // 系统订单号
-        "client_order_id":"000000001",  // 客户订单号
+        "client_order_id":"1679644419000111",  // 客户订单号
+        "type": "limit",                // 交易类型
         "instrument_id":"ETH-BTC",      // 合约编号
         "direction":"buy",              // 买卖方向
-        "stop_price":"0",               // 止损触发价格
         "price":"1",                    // 限价
         "volume":"1",                   // 原始数量
-        "status": "FILLED",             // 订单状态
-        "post_only": "false",           // 是否仅作为maker
-        "timestamp": 1478692862000,     // 交易时间
         "filled_size": "1",             // 已成交數量
+        "status": "FILLED",             // 订单状态
+        "timestamp": 1478692862000,     // 交易时间
+        "post_only": "false",           // 是否仅作为maker
         "avg_filled_price": "1",        // 成交均价
         "unfilled_size": "0",           // 未成交数量
         "sum_trade_amount": "1"         // 累计成交额
@@ -1751,12 +1736,11 @@ null
 
 ```json
 {
-    "type":"sub-resp",
     "topic":"trade_rtn",
     "data":[
         {
             "sys_order_id":"1550849345000001",     // 系统订单号
-            "client_order_id":"000000001",  // 客户订单号
+            "client_order_id":"1679644419000111",  // 客户订单号
             "trade_id":"1",                 // 成交编号
             "instrument_id":"ETH-BTC",      // 合约编号
             "direction":"buy",              // 买卖方向
@@ -1764,12 +1748,12 @@ null
             "volume":"1",                   // 数量
             "fee":"0.05",                   // 手续费
             "fee_ccy": "BTC",               // 手续费币种
-            "timestamp": 1478692862000,     // 交易时间
-            "trade_type": "Common"          // 交易类型
+            "trade_type": "Maker",          // 交易类型
+            "timestamp": 1478692862000      // 交易时间
         },
         {
             "sys_order_id":"1550849345000002",
-            "client_order_id":"000000002",
+            "client_order_id":"1679644419000112",
             "trade_id":"2",
             "instrument_id":"ETH-BTC",
             "direction":"sell",
@@ -1777,8 +1761,8 @@ null
             "volume":"2",
             "fee":"0.05",
             "fee_ccy": "BTC",
-            "timestamp":1478692862000,
-            "trade_type": "Common"
+            "trade_type": "Maker",
+            "timestamp":1478692862000
         }
     ]
 }
@@ -1826,7 +1810,6 @@ null
 
 ```json
 {
-    "type":"sub-resp",
     "topic":"balance",
     "data":[
         {
